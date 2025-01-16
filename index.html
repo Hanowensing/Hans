@@ -1,26 +1,472 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<title>OWEN HAN'S PAGE</title>
-<meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDRD Meal Recommendation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .recommendations {
+            margin-top: 20px;
+        }
+        .recommendations h2 {
+            text-align: center;
+        }
+        .meal {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-  <h1><a href="https://www.instagram.com/jjuu_uni/" target="_blank" title="Owen's page">OWEN HAN'S INTRO</a></h1>
-  <ol>
-    <li><a href="https://www.instagram.com/jjuu_uni/"target="_blank" title="Owen's Instagram">Owen Han's Instagram</a></li>
-    <li><a href="https://blog.naver.com/hhj1627"target="_blank"title="Owen's blog">Owen Han's blog</a></li>
-  </ol>
-  <h2>HTML</h2>
-  <p><a href="https://www.instagram.com/jjuu_uni/" target="_blank" title="html5 specification">OWEN HAN'S INTRO</a> 
-is the standard markup language for <strong>creating <u>web</u> 
-pages</strong> and web applications.
-Web browsers receive HTML documents from a web server or from local storage and render 
-them into multimedia web pages. 
-HTML describes the structure of a web page
- semantically and originally included cues for the appearance 
-of the document.
-  <img src="coding.jpg" width="100%">
-  </p><p style="margin-top:45px;">HTML elements are the building blocks of HTML pages. With HTML constructs, images and other objects, such as interactive forms, may be embedded into the rendered page. It provides a means to create structured documents by denoting structural semantics for text such as headings, paragraphs, lists, links, quotes and other items. HTML elements are delineated by tags, written using angle brackets.
-  </p>
+    <div class="container">
+        <h1>MDRD Meal Recommendation</h1>
+        <div class="form-group">
+            <label for="mdrdStage">Enter your MDRD stage (1-5):</label>
+            <select id="mdrdStage">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="meal1">Select your last 3 meals:</label>
+            <select id="meal1">
+                <option value="">-- Select Meal 1 --</option>
+                <option value="White Rice">White Rice</option>
+                <option value="Fried Snakehead Fish">Fried Snakehead Fish</option>
+                <option value="Pumpkin Soup">Pumpkin Soup</option>
+                <option value="Fermented Fish">Fermented Fish</option>
+                <option value="Jute Leaf Soup with Shrimp">Jute Leaf Soup with Shrimp</option>
+                <option value="Stir-Fried Bitter Melon">Stir-Fried Bitter Melon</option>
+                <option value="Boiled Turnip">Boiled Turnip</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="meal2">
+                <option value="">-- Select Meal 2 --</option>
+                <option value="White Rice">White Rice</option>
+                <option value="Fried Snakehead Fish">Fried Snakehead Fish</option>
+                <option value="Pumpkin Soup">Pumpkin Soup</option>
+                <option value="Fermented Fish">Fermented Fish</option>
+                <option value="Jute Leaf Soup with Shrimp">Jute Leaf Soup with Shrimp</option>
+                <option value="Stir-Fried Bitter Melon">Stir-Fried Bitter Melon</option>
+                <option value="Boiled Turnip">Boiled Turnip</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="meal3">
+                <option value="">-- Select Meal 3 --</option>
+                <option value="White Rice">White Rice</option>
+                <option value="Fried Snakehead Fish">Fried Snakehead Fish</option>
+                <option value="Pumpkin Soup">Pumpkin Soup</option>
+                <option value="Fermented Fish">Fermented Fish</option>
+                <option value="Jute Leaf Soup with Shrimp">Jute Leaf Soup with Shrimp</option>
+                <option value="Stir-Fried Bitter Melon">Stir-Fried Bitter Melon</option>
+                <option value="Boiled Turnip">Boiled Turnip</option>
+            </select>
+        </div>
+        <button class="btn" id="recommendButton">Get Recommendations</button>
+
+        <div class="recommendations" id="recommendations"></div>
+    </div>
+
+    <script>
+        const foodDatabase = [
+            { name: "Fermented Fish", GI: 10, calories: 90, carbs: 0, fat: 4, sodium: 600, potassium: 200 },
+            { name: "Fried Snakehead Fish", GI: 10, calories: 120, carbs: 0, fat: 3, sodium: 200, potassium: 0 },
+            { name: "Stir-Fried Cabbage", GI: 15, calories: 40, carbs: 1, fat: 2, sodium: 150, potassium: 0 },
+            { name: "White Rice", GI: 73, calories: 130, carbs: 28, fat: 0.3, sodium: 1, potassium: 0 },
+            { name: "Vietnamese Pancakes", GI: 60, calories: 150, carbs: 15, fat: 8, sodium: 300, potassium: 0 },
+            { name: "Jute Leaf Soup with Shrimp", GI: 15, calories: 30, carbs: 1, fat: 0.5, sodium: 100, potassium: 0 },
+            { name: "Pickled Vegetables with Fermented Fish", GI: 30, calories: 50, carbs: 2, fat: 1, sodium: 800, potassium: 0 },
+            { name: "Sweet and Sour Soup with Tilapia", GI: 30, calories: 50, carbs: 5, fat: 2, sodium: 200, potassium: 150 },
+            { name: "Braised Pork with Eggs", GI: 5, calories: 150, carbs: 0, fat: 10, sodium: 400, potassium: 250 },
+            { name: "Stir-Fried Bitter Melon", GI: 50, calories: 60, carbs: 4, fat: 3, sodium: 150, potassium: 200 },
+            { name: "Pumpkin Soup", GI: 45, calories: 70, carbs: 10, fat: 2, sodium: 100, potassium: 300 },
+            { name: "Boiled Turnip", GI: 20, calories: 35, carbs: 5, fat: 0, sodium: 50, potassium: 300 }
+        ];
+
+        const dietaryLimits = {
+            1: { sodium: 2300, potassium: 4700 },
+            2: { sodium: 2000, potassium: 4000 },
+            3: { sodium: 1500, potassium: 3000 },
+            4: { sodium: 1000, potassium: 2000 },
+            5: { sodium: 500, potassium: 1500 },
+        };
+
+        const analyzeMeals = (previousMeals, mdrdStage) => {
+            const limits = dietaryLimits[mdrdStage];
+
+            const totalSodium = previousMeals.reduce((sum, meal) => {
+                const food = foodDatabase.find(f => f.name === meal);
+                return sum + (food ? food.sodium : 0);
+            }, 0);
+
+            const totalPotassium = previousMeals.reduce((sum, meal) => {
+                const food = foodDatabase.find(f => f.name === meal);
+                return sum + (food ? food.potassium : 0);
+            }, 0);
+
+            const avgGI = previousMeals.reduce((sum, meal) => {
+                const food = foodDatabase.find(f => f.name === meal);
+                return sum + (food ? food.GI : 0);
+            }, 0) / previousMeals.length;
+
+            return {
+                totalSodium,
+                totalPotassium,
+                avgGI: avgGI.toFixed(2),
+                exceedsSodium: totalSodium > limits.sodium,
+                exceedsPotassium: totalPotassium > limits.potassium
+            };
+        };
+
+        const recommendMeals = (mdrdStage, previousMeals) => {
+            const limits = dietaryLimits[mdrdStage];
+            const recentMeals = new Set(previousMeals);
+
+            const filteredFoods = foodDatabase.filter(food =>
+                food.sodium <= limits.sodium &&
+                food.potassium <= limits.potassium &&
+                !recentMeals.has(food.name)
+            );
+
+            const recommendations = [];
+            for (let i = 0; i < 3; i++) {
+                const dailyMeals = { breakfast: null, lunch: null, dinner: null };
+                ["breakfast", "lunch", "dinner"].forEach(mealType => {
+                    if (filteredFoods.length > 0) {
+                        const selectedFood = filteredFoods[Math.floor(Math.random() * filteredFoods.length)];
+                        dailyMeals[mealType] = selectedFood;
+                        recentMeals.add(selectedFood.name);
+                    }
+                });
+                recommendations.push(dailyMeals);
+            }
+            return recommendations;
+        };
+
+        document.getElementById("recommendButton").addEventListener("click", () => {
+            const mdrdStage = parseInt(document.getElementById("mdrdStage").value);
+            const previousMeals = [
+                document.getElementById("meal1").value,
+                document.getElementById("meal2").value,
+                document.getElementById("meal3").value
+            ].filter(meal => meal);
+
+            const analysis = analyzeMeals(previousMeals, mdrdStage);
+
+            const recommendations = recommendMeals(mdrdStage, previousMeals);
+
+            const recommendationsDiv = document.getElementById("recommendations");
+            recommendationsDiv.innerHTML = `
+                <h2>Analysis</h2>
+                <p>Based on your recent meals:</p>
+                <ul>
+                    <li>Average sodium consumed: ${analysis.totalSodium} mg (limit: ${dietaryLimits[mdrdStage].sodium} mg)</li>
+                    <li>Average potassium consumed: ${analysis.totalPotassium} mg (limit: ${dietaryLimits[mdrdStage].potassium} mg)</li>
+                    <li>Average GI score: ${analysis.avgGI}</li>
+                </ul>
+                <p>${analysis.exceedsSodium || analysis.exceedsPotassium ? "You are exceeding your dietary guidelines for sodium and/or potassium." : "Your sodium and potassium intake is within limits."}</p>
+                <h2>Meal Recommendations</h2>
+            `;
+            recommendations.forEach((dailyMeals, index) => {
+                recommendationsDiv.innerHTML += `
+                    <div class="meal">
+                        <h3>Day ${index + 1}</h3>
+                        <p>Breakfast: ${dailyMeals.breakfast ? dailyMeals.breakfast.name : "N/A"}</p>
+                        <p>Lunch: ${dailyMeals.lunch ? dailyMeals.lunch.name : "N/A"}</p>
+                        <p>Dinner: ${dailyMeals.dinner ? dailyMeals.dinner.name : "N/A"}</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MDRD Meal Recommendation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+        .form-group input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: #007bff;
+            color: #fff;
+            text-align: center;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .recommendations {
+            margin-top: 20px;
+        }
+        .recommendations h2 {
+            text-align: center;
+        }
+        .meal {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MDRD Meal Recommendation</h1>
+        <div class="form-group">
+            <label for="mdrdStage">Enter your MDRD stage (1-5):</label>
+            <select id="mdrdStage">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="meal1">Select your last 3 meals:</label>
+            <select id="meal1">
+                <option value="">-- Select Meal 1 --</option>
+                <option value="White Rice">White Rice</option>
+                <option value="Fried Snakehead Fish">Fried Snakehead Fish</option>
+                <option value="Pumpkin Soup">Pumpkin Soup</option>
+                <option value="Fermented Fish">Fermented Fish</option>
+                <option value="Jute Leaf Soup with Shrimp">Jute Leaf Soup with Shrimp</option>
+                <option value="Stir-Fried Bitter Melon">Stir-Fried Bitter Melon</option>
+                <option value="Boiled Turnip">Boiled Turnip</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="meal2">
+                <option value="">-- Select Meal 2 --</option>
+                <option value="White Rice">White Rice</option>
+                <option value="Fried Snakehead Fish">Fried Snakehead Fish</option>
+                <option value="Pumpkin Soup">Pumpkin Soup</option>
+                <option value="Fermented Fish">Fermented Fish</option>
+                <option value="Jute Leaf Soup with Shrimp">Jute Leaf Soup with Shrimp</option>
+                <option value="Stir-Fried Bitter Melon">Stir-Fried Bitter Melon</option>
+                <option value="Boiled Turnip">Boiled Turnip</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="meal3">
+                <option value="">-- Select Meal 3 --</option>
+                <option value="White Rice">White Rice</option>
+                <option value="Fried Snakehead Fish">Fried Snakehead Fish</option>
+                <option value="Pumpkin Soup">Pumpkin Soup</option>
+                <option value="Fermented Fish">Fermented Fish</option>
+                <option value="Jute Leaf Soup with Shrimp">Jute Leaf Soup with Shrimp</option>
+                <option value="Stir-Fried Bitter Melon">Stir-Fried Bitter Melon</option>
+                <option value="Boiled Turnip">Boiled Turnip</option>
+            </select>
+        </div>
+        <button class="btn" id="recommendButton">Get Recommendations</button>
+
+        <div class="recommendations" id="recommendations"></div>
+    </div>
+
+    <script>
+        const foodDatabase = [
+            { name: "Fermented Fish", GI: 10, calories: 90, carbs: 0, fat: 4, sodium: 600, potassium: 200 },
+            { name: "Fried Snakehead Fish", GI: 10, calories: 120, carbs: 0, fat: 3, sodium: 200, potassium: 0 },
+            { name: "Stir-Fried Cabbage", GI: 15, calories: 40, carbs: 1, fat: 2, sodium: 150, potassium: 0 },
+            { name: "White Rice", GI: 73, calories: 130, carbs: 28, fat: 0.3, sodium: 1, potassium: 0 },
+            { name: "Vietnamese Pancakes", GI: 60, calories: 150, carbs: 15, fat: 8, sodium: 300, potassium: 0 },
+            { name: "Jute Leaf Soup with Shrimp", GI: 15, calories: 30, carbs: 1, fat: 0.5, sodium: 100, potassium: 0 },
+            { name: "Pickled Vegetables with Fermented Fish", GI: 30, calories: 50, carbs: 2, fat: 1, sodium: 800, potassium: 0 },
+            { name: "Sweet and Sour Soup with Tilapia", GI: 30, calories: 50, carbs: 5, fat: 2, sodium: 200, potassium: 150 },
+            { name: "Braised Pork with Eggs", GI: 5, calories: 150, carbs: 0, fat: 10, sodium: 400, potassium: 250 },
+            { name: "Stir-Fried Bitter Melon", GI: 50, calories: 60, carbs: 4, fat: 3, sodium: 150, potassium: 200 },
+            { name: "Pumpkin Soup", GI: 45, calories: 70, carbs: 10, fat: 2, sodium: 100, potassium: 300 },
+            { name: "Boiled Turnip", GI: 20, calories: 35, carbs: 5, fat: 0, sodium: 50, potassium: 300 }
+        ];
+
+        const dietaryLimits = {
+            1: { sodium: 2300, potassium: 4700 },
+            2: { sodium: 2000, potassium: 4000 },
+            3: { sodium: 1500, potassium: 3000 },
+            4: { sodium: 1000, potassium: 2000 },
+            5: { sodium: 500, potassium: 1500 },
+        };
+
+        const analyzeMeals = (previousMeals, mdrdStage) => {
+            const limits = dietaryLimits[mdrdStage];
+
+            const totalSodium = previousMeals.reduce((sum, meal) => {
+                const food = foodDatabase.find(f => f.name === meal);
+                return sum + (food ? food.sodium : 0);
+            }, 0);
+
+            const totalPotassium = previousMeals.reduce((sum, meal) => {
+                const food = foodDatabase.find(f => f.name === meal);
+                return sum + (food ? food.potassium : 0);
+            }, 0);
+
+            const avgGI = previousMeals.reduce((sum, meal) => {
+                const food = foodDatabase.find(f => f.name === meal);
+                return sum + (food ? food.GI : 0);
+            }, 0) / previousMeals.length;
+
+            return {
+                totalSodium,
+                totalPotassium,
+                avgGI: avgGI.toFixed(2),
+                exceedsSodium: totalSodium > limits.sodium,
+                exceedsPotassium: totalPotassium > limits.potassium
+            };
+        };
+
+        const recommendMeals = (mdrdStage, previousMeals) => {
+            const limits = dietaryLimits[mdrdStage];
+            const recentMeals = new Set(previousMeals);
+
+            const filteredFoods = foodDatabase.filter(food =>
+                food.sodium <= limits.sodium &&
+                food.potassium <= limits.potassium &&
+                !recentMeals.has(food.name)
+            );
+
+            const recommendations = [];
+            for (let i = 0; i < 3; i++) {
+                const dailyMeals = { breakfast: null, lunch: null, dinner: null };
+                ["breakfast", "lunch", "dinner"].forEach(mealType => {
+                    if (filteredFoods.length > 0) {
+                        const selectedFood = filteredFoods[Math.floor(Math.random() * filteredFoods.length)];
+                        dailyMeals[mealType] = selectedFood;
+                        recentMeals.add(selectedFood.name);
+                    }
+                });
+                recommendations.push(dailyMeals);
+            }
+            return recommendations;
+        };
+
+        document.getElementById("recommendButton").addEventListener("click", () => {
+            const mdrdStage = parseInt(document.getElementById("mdrdStage").value);
+            const previousMeals = [
+                document.getElementById("meal1").value,
+                document.getElementById("meal2").value,
+                document.getElementById("meal3").value
+            ].filter(meal => meal);
+
+            const analysis = analyzeMeals(previousMeals, mdrdStage);
+
+            const recommendations = recommendMeals(mdrdStage, previousMeals);
+
+            const recommendationsDiv = document.getElementById("recommendations");
+            recommendationsDiv.innerHTML = `
+                <h2>Analysis</h2>
+                <p>Based on your recent meals:</p>
+                <ul>
+                    <li>Average sodium consumed: ${analysis.totalSodium} mg (limit: ${dietaryLimits[mdrdStage].sodium} mg)</li>
+                    <li>Average potassium consumed: ${analysis.totalPotassium} mg (limit: ${dietaryLimits[mdrdStage].potassium} mg)</li>
+                    <li>Average GI score: ${analysis.avgGI}</li>
+                </ul>
+                <p>${analysis.exceedsSodium || analysis.exceedsPotassium ? "You are exceeding your dietary guidelines for sodium and/or potassium." : "Your sodium and potassium intake is within limits."}</p>
+                <h2>Meal Recommendations</h2>
+            `;
+            recommendations.forEach((dailyMeals, index) => {
+                recommendationsDiv.innerHTML += `
+                    <div class="meal">
+                        <h3>Day ${index + 1}</h3>
+                        <p>Breakfast: ${dailyMeals.breakfast ? dailyMeals.breakfast.name : "N/A"}</p>
+                        <p>Lunch: ${dailyMeals.lunch ? dailyMeals.lunch.name : "N/A"}</p>
+                        <p>Dinner: ${dailyMeals.dinner ? dailyMeals.dinner.name : "N/A"}</p>
+                    </div>
+                `;
+            });
+        });
+    </script>
 </body>
 </html>
